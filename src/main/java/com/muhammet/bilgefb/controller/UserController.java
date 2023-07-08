@@ -7,10 +7,7 @@ import com.muhammet.bilgefb.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.muhammet.bilgefb.constants.RestApiList.*;
 @RestController
@@ -26,6 +23,7 @@ public class UserController {
      * bir entity olarak dönün ve bu entity içinde bir mesaj - status code ve bir data döndürün.
      */
     @PostMapping(REGISTER)
+    @CrossOrigin("*")
     public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto dto){
         userService.save(dto);
         return ResponseEntity.ok(RegisterResponseDto.builder()
@@ -34,6 +32,7 @@ public class UserController {
     }
 
     @PostMapping(LOGIN)
+    @CrossOrigin("*")
     public ResponseEntity<DoLoginResponseDto> doLogin(@RequestBody @Valid DoLoginRequestDto dto){
         return ResponseEntity.ok(userService.doLogin(dto));
     }
