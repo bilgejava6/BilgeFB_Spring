@@ -40,9 +40,11 @@ public class RestApiList {
     public static final String REGISTER = "/register";
     public static final String LOGIN = "/login";
 
+    public static final String GET_PROFILE_BY_TOKEN = "/getProfileByToken";
 
+    public static final String GET_PROFILE = "/getProfile";
 
-
+    public static final String SAVE_PROFILE = "/saveProfile";
 
 
 }

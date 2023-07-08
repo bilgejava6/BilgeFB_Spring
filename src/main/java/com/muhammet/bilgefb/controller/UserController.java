@@ -1,8 +1,9 @@
 package com.muhammet.bilgefb.controller;
+import com.muhammet.bilgefb.dto.request.DefaultRequestDto;
 import com.muhammet.bilgefb.dto.request.DoLoginRequestDto;
 import com.muhammet.bilgefb.dto.request.RegisterRequestDto;
-import com.muhammet.bilgefb.dto.response.DoLoginResponseDto;
-import com.muhammet.bilgefb.dto.response.RegisterResponseDto;
+import com.muhammet.bilgefb.dto.request.SaveProfileRequestDto;
+import com.muhammet.bilgefb.dto.response.*;
 import com.muhammet.bilgefb.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,4 +37,23 @@ public class UserController {
     public ResponseEntity<DoLoginResponseDto> doLogin(@RequestBody @Valid DoLoginRequestDto dto){
         return ResponseEntity.ok(userService.doLogin(dto));
     }
+
+    @PostMapping(GET_PROFILE_BY_TOKEN)
+    @CrossOrigin("*")
+    public ResponseEntity<GetProfileByTokenResponseDto> getProfileByToken(@RequestBody @Valid DefaultRequestDto dto){
+          return ResponseEntity.ok(userService.getProfileByToken(dto.getToken()));
+    }
+
+    @PostMapping(GET_PROFILE)
+    @CrossOrigin("*")
+    public ResponseEntity<GetProfileResponseDto> getProfile(@RequestBody @Valid DefaultRequestDto dto){
+        return ResponseEntity.ok(userService.getProfile(dto.getToken()));
+    }
+
+    @PostMapping(SAVE_PROFILE)
+    @CrossOrigin("*")
+    public ResponseEntity<SaveProfileResponseDto> saveProfile(@RequestBody @Valid SaveProfileRequestDto dto){
+        return ResponseEntity.ok(userService.saveProfile(dto));
+    }
+
 }

@@ -21,6 +21,10 @@ public class User {
     String name;
     String surname;
     String email;
+    String birthdate;
+    String about;
+    String city;
+    String country;
     String userimage;
     Long memberdate;
     int status;

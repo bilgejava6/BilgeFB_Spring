@@ -15,7 +15,7 @@ public class JwtTokenManager {
     private final String secretKey = "dfşlgjkd543t09bjo66";
     public Optional<String> createToken(Long id){
         String token= null;
-        Long exDate = 1000L*60;
+        Long exDate = 1000L*60*150;
         try{
             /**
              * DİKKAT!!!!
