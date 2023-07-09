@@ -39,6 +39,7 @@ public class RestApiList {
 
     public static final String REGISTER = "/register";
     public static final String LOGIN = "/login";
+    public static final String LOGOUT = "/logout";
 
     public static final String GET_PROFILE_BY_TOKEN = "/getProfileByToken";
 
@@ -46,5 +47,10 @@ public class RestApiList {
 
     public static final String SAVE_PROFILE = "/saveProfile";
 
+    public static final String NEWUSERLIST = "/newUserList";
+
+    public static final String ONLINE_USERS = "/onlineUsers";
+
+    public static final String CREATE_POST = "/createPost";
 
 }

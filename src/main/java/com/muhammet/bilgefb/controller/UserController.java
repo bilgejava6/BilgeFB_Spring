@@ -38,6 +38,12 @@ public class UserController {
         return ResponseEntity.ok(userService.doLogin(dto));
     }
 
+    @PostMapping(LOGOUT)
+    @CrossOrigin("*")
+    public ResponseEntity<DoLogoutResponseDto> doLogout(@RequestBody @Valid DefaultRequestDto dto){
+        return ResponseEntity.ok(userService.doLogout(dto));
+    }
+
     @PostMapping(GET_PROFILE_BY_TOKEN)
     @CrossOrigin("*")
     public ResponseEntity<GetProfileByTokenResponseDto> getProfileByToken(@RequestBody @Valid DefaultRequestDto dto){
@@ -56,4 +62,9 @@ public class UserController {
         return ResponseEntity.ok(userService.saveProfile(dto));
     }
 
+    @PostMapping(NEWUSERLIST)
+    @CrossOrigin("*")
+    public ResponseEntity<GetNewUserListResponseDto> getNewUserList(@RequestBody @Valid DefaultRequestDto dto){
+        return ResponseEntity.ok(userService.getNewUserList(dto));
+    }
 }
