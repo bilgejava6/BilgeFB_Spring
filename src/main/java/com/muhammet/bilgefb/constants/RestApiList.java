@@ -52,5 +52,8 @@ public class RestApiList {
     public static final String ONLINE_USERS = "/onlineUsers";
 
     public static final String CREATE_POST = "/createPost";
+    public static final String UPLOAD_IMAGE = "/uploadImage";
+
+    public static final String GET_POSTS = "/getPosts";
 
 }

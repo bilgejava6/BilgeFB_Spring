@@ -1,6 +1,11 @@
 package com.muhammet.bilgefb.controller;
 import com.cloudinary.utils.ObjectUtils;
 import com.muhammet.bilgefb.dto.request.CreatePostRequestDto;
+import com.muhammet.bilgefb.dto.request.DefaultRequestDto;
+import com.muhammet.bilgefb.dto.response.CreatePostResponseDto;
+import com.muhammet.bilgefb.dto.response.GetAllPostsResponseDto;
+import com.muhammet.bilgefb.dto.response.UploadFileResponseDto;
+import com.muhammet.bilgefb.services.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -20,9 +25,12 @@ import java.util.UUID;
 @RequestMapping(POST)
 public class PostController {
 
-    @PostMapping(value = CREATE_POST,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    private final PostService postService;
+
+    @PostMapping(value = UPLOAD_IMAGE,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @CrossOrigin("*")
-    public ResponseEntity<?> createPost(@RequestBody MultipartFile imageFile){
+    public ResponseEntity<UploadFileResponseDto> uploadImage(@RequestParam(value = "file") MultipartFile imageFile,
+                                                             Long userid, String comment,String token){
         String resimURL = "";
         try{
             Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
@@ -35,13 +43,31 @@ public class PostController {
                     .upload(imageFile.getBytes(),
                             ObjectUtils.asMap(uuid, "test" ));
             resimURL = result.get("url").toString();
+            postService.createPost(CreatePostRequestDto.builder()
+                            .token(token)
+                    .comment(comment)
+                    .userid(userid)
+                    .imageurl(resimURL)
+                    .build());
         }   catch (Exception e){
             System.out.println("Hata oldu....: "+ e.toString());
         }
-        return ResponseEntity.ok(resimURL);
+        return ResponseEntity.ok(UploadFileResponseDto.builder()
+                        .message("Başarılı")
+                        .statusCode(200)
+                        .url(resimURL)
+                .build());
     }
 
-    @GetMapping("/testUploadImage")
+    @PostMapping(CREATE_POST)
+    @CrossOrigin("*")
+    public ResponseEntity<CreatePostResponseDto> createPost(@RequestBody @Valid CreatePostRequestDto dto){
+        return ResponseEntity.ok(
+                postService.createPost(dto)
+        );
+    }
+
+    //@GetMapping("/testUploadImage")
     public ResponseEntity<Void> testUploadImage(){
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", "di8byecer",
@@ -60,5 +86,11 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
-
+    @PostMapping(GET_POSTS)
+    @CrossOrigin("*")
+    public ResponseEntity<GetAllPostsResponseDto> getAllPosts(@RequestBody @Valid DefaultRequestDto dto){
+        return ResponseEntity.ok(
+                postService.getAllPosts(dto)
+        );
+    }
 }

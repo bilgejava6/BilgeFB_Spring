@@ -8,4 +8,5 @@ import static com.muhammet.bilgefb.constants.RestApiList.*;
 @RequiredArgsConstructor
 @RequestMapping(COMMENT)
 public class CommentController {
+
 }

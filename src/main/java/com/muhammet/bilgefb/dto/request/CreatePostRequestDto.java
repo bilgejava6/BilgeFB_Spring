@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @Builder
 public class CreatePostRequestDto {
-    private String token;
-    MultipartFile file;
+    String token;
+    String imageurl;
+    Long userid;
+    String comment;
 }
