@@ -2,8 +2,6 @@ server:
   max-http-header-size: 10MB
   port: 9090
 
-
-
 spring:
   servlet:
     multipart:

@@ -27,6 +27,9 @@ public class UserService {
     private final IUserRepository repository;
     private final IOnlineRepository onlineRepository;
     private final JwtTokenManager jwtTokenManager;
+    public void save(User user){
+        repository.save(user);
+    }
     public void save(RegisterRequestDto dto) {
         Optional<User> userOptional = repository.findOptionalByUsername(dto.getUsername());
         if(userOptional.isPresent()) // Eğer bu kullanıcı adı daha önce kayıt edilmiş ise hata fırlat
@@ -156,5 +159,8 @@ public class UserService {
                 .build();
     }
 
+    public Optional<User> findById(Long id){
+        return repository.findById(id);
+    }
 
 }

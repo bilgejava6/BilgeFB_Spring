@@ -1,14 +1,23 @@
 package com.muhammet.bilgefb.controller;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.muhammet.bilgefb.dto.request.DefaultRequestDto;
 import com.muhammet.bilgefb.dto.request.DoLoginRequestDto;
 import com.muhammet.bilgefb.dto.request.RegisterRequestDto;
 import com.muhammet.bilgefb.dto.request.SaveProfileRequestDto;
 import com.muhammet.bilgefb.dto.response.*;
+import com.muhammet.bilgefb.repository.entity.User;
 import com.muhammet.bilgefb.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.muhammet.bilgefb.constants.RestApiList.*;
 @RestController
@@ -67,4 +76,35 @@ public class UserController {
     public ResponseEntity<GetNewUserListResponseDto> getNewUserList(@RequestBody @Valid DefaultRequestDto dto){
         return ResponseEntity.ok(userService.getNewUserList(dto));
     }
+
+    @PostMapping(value = "/uploadfile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @CrossOrigin("*")
+    public ResponseEntity<UploadFileResponseDto> uploadProfileImage(@RequestParam(value = "file") MultipartFile file, Long userid){
+        String resimURL = "";
+        try{
+            Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                    "cloud_name", "di8byecer",
+                    "api_key", "572154474642921",
+                    "api_secret", "DmSNbqFIPpknd4R-ug7PegoPwzE"));
+            UUID uuid = UUID.randomUUID();
+
+            Map result =  cloudinary.uploader()
+                    .upload(file.getBytes(),
+                            ObjectUtils.asMap(uuid, "test" ));
+            resimURL = result.get("url").toString();
+            Optional<User> user = userService.findById(userid);
+            if(user.isPresent()){
+                user.get().setUserimage(resimURL);
+                userService.save(user.get());
+            }
+        }   catch (Exception e){
+            System.out.println("Hata oldu....: "+ e.toString());
+        }
+        return ResponseEntity.ok(UploadFileResponseDto.builder()
+                .message("Başarılı")
+                .statusCode(200)
+                .url(resimURL)
+                .build());
+    }
+
 }

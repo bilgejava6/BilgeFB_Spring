@@ -27,10 +27,9 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping(value = UPLOAD_IMAGE,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/uploadfile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @CrossOrigin("*")
-    public ResponseEntity<UploadFileResponseDto> uploadImage(@RequestParam(value = "file") MultipartFile imageFile,
-                                                             Long userid, String comment,String token){
+    public ResponseEntity<UploadFileResponseDto> uploadPostImage(@RequestParam(value = "file") MultipartFile file){
         String resimURL = "";
         try{
             Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
@@ -40,24 +39,19 @@ public class PostController {
             UUID uuid = UUID.randomUUID();
 
             Map result =  cloudinary.uploader()
-                    .upload(imageFile.getBytes(),
+                    .upload(file.getBytes(),
                             ObjectUtils.asMap(uuid, "test" ));
             resimURL = result.get("url").toString();
-            postService.createPost(CreatePostRequestDto.builder()
-                            .token(token)
-                    .comment(comment)
-                    .userid(userid)
-                    .imageurl(resimURL)
-                    .build());
         }   catch (Exception e){
             System.out.println("Hata oldu....: "+ e.toString());
         }
         return ResponseEntity.ok(UploadFileResponseDto.builder()
-                        .message("Başarılı")
-                        .statusCode(200)
-                        .url(resimURL)
+                .message("Başarılı")
+                .statusCode(200)
+                .url(resimURL)
                 .build());
     }
+
 
     @PostMapping(CREATE_POST)
     @CrossOrigin("*")
